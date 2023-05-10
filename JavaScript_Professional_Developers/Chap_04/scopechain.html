@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>执行上下文和作用域</title>
+</head>
+
+<body>
+    <script>
+        /*
+            1. 每个上下文都有一个关联的变量对象；
+            2. 全局上下文 -》 windowns对象，
+                            所有通过var定义的全局变量和函数都会成为window对象的属性和方法；
+                            上下文会在所有代码执行完毕之后被销毁，包括定义在它上面的所有变量和函数；                      
+                |-- 函数上下文 -》 函数执行进入后，函数上下文会堆到一个上下文栈中，函数执行完毕，弹出该函数上下文，控制权
+                                    返还给之前的执行上下文，javascript的执行流就是通过上下文栈控制的；
+                                上下文中代码执行会生成一个对象的作用域链，这个作用域链决定了各级上下文代码在访问变量和函数时的顺序，
+                                代码执行的上下文对象始终位于作用域链的最前端，
+                                1.上下文是函数，活动对象啊是变量，活动对象最初只有一个arguements变量（全局上下文没有）
+                                最近匹配原则；
+                                代码执行时的标识符解析是通过沿作用域链逐级搜索标识符名称完成的，从作用域链的最前端开始，逐级往后，直到找到标识符；
+
+
+        */
+        // 全局上下文活动对象
+        var color = "blue";
+
+        function changeColr() {
+            if (color === "blue") {
+                color = "red";
+            } else {
+                color = "blue"
+            }
+        }
+
+        changeColr();
+        console.log(color);
+
+        // 上下文能够访问当前的arguements对象和父类上下文的活动对象，但是无法访问子类上下文对象；
+
+        // 作用域链增强：
+        //  try/catch 或者 with语句会在作用域链临时添加一个上下文，这个上下文在执行完成之后会删除；
+        /* 
+            1. with语句会向作用域链前端添加指定的对象，
+            2.catch 语句，会创建一个新的变量对象；这个变量对象包含了需要抛出的错误对象声明；
+
+
+        */
+
+        function buildUrl() {
+            let qs = "?debug=true";
+
+            // 这个location会被条件到作用域链的最前端，当url使用var声明的时候，会成为上层上下文对象的一部分
+            // 但是对于let声明的对象，由于url的作用域范围是块级作用域，所以作用域仅限于with内部；
+            with (location) {
+                let url = href + qs;
+            }
+
+            return url;
+        }
+
+        /* 
+            变量声明：
+            1.var 声明对象会自动添加到最接近的上下文中；
+                var声明的对象会被提升到全局作用域的顶部，提升会在同一作用域的代码不必考虑变量是否声明就可以直接使用；
+                这个会导致什么呢，就是如果先使用后声明，不会导致出错，只会导致Undefined；
+        */
+        function add(num1, num2) {
+            // 未进过声明的变量会提升为全局上下文中；
+            sum = num1 + num2;
+            return sum;
+        }
+        add(1, 2);  //这玩意你得先调用，才能声明sum变量；
+        console.log(sum);
+
+        console.log(names);
+        var names = "Jake";
+
+        /*
+            2. 使用let的块级作用域声明：作用域是块级别的
+              let 和 var不能重复声明，否则会报错；var 声明的变量会忽略，let声明的变量会报错；
+              2. let声明的对象适合循环，var声明的对象会造成变量泄露
+                虽然说let也会有提升的情况，但是由于暂时性死区的缘故，所以不能声明之前就是用let变量；
+        
+        
+        
+        */
+        {
+            let a;
+            // let a;
+        }
+
+        for (var i = 0; i < 10; i++) { }
+        console.log(i); //10
+        for (let j = 0; j < 10; j++) { }
+        // console.log(j); //Uncaught ReferenceError: j is not defined
+
+        /*
+            3. 是用const 的常量声明；
+                1.声明必须初始化，初始化完毕不允许更改；
+                2. 声明只应用到顶级原语或者对象 ，就是声明的对象不允许更改，但是对象属性不受影响；
+        */
+
+        const o1 = {};
+        // o1 = {};    //Assignment to constant variable.
+        o1.name = "Nico";
+        console.log(o1.name);
+
+        //如果要对整个对象不允许更改值，那么我们可以使用Object.freeze();这样虽然属性不会报错，但是没作用；
+        const o2 = Object.freeze(); //新浏览器貌似连属性都不允许了；
+        //o2.name = "jake";
+        //console.log(o2.name);
+
+        // 标识符查找； 就是就近原则；
+        console.log(color)
+        console.log(window.color);
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>

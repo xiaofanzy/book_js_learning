@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- let 声明的作用域是块作用域，而var声明的作用域是函数作用域 -->
+    <script>
+        if (true) {
+            let age = 26;
+            console.log(age);
+        }
+
+        //let的作用域限于该块内部，块作用域是函数作用域的子集，因此适用于var作用域的限制也适用于let
+        //console.log(age)
+
+        // 2. let声明的作用域中，不能存在变量重复命名的情况
+        let name;
+        // let name;这就会报错了；
+
+        // 当嵌套使用的时候，不会报错；
+        if (true) {
+            let name = "Tom"; // 这里就没问题
+        }
+
+        // 混用变量导致冗余不会因为let还是var受影响。
+        // var name;   //这就不行
+
+        // 3. 暂时性死区
+        // let声明的作用域没有变量提升的
+        console.log(name);
+
+        // console.log(ages);  //Cannot access 'ages' before initialization
+        let ages = 20;
+
+        // 4.全局声明：
+        // var关键字在全局作用域声明的变量会成为Windows的属性，而let不会
+        var matName = "Matt";
+        console.log(window.matName);
+
+        let matAge = 20;
+        console.log(window.matAge); //undefined
+
+        // 5.条件声明
+        var namee;  //这里解释一下， 如果前面用到了这个变量，但是没有声明，这里namee会有提升声明的方式，放到最前面去；所以没问题
+        // let ages;    // 这里不行，如果ages 声明过他是没有变量提升的；
+
+        // 6.for循环中的let声明
+
+        //var 声明的时候，循环定义的变量会渗透到循环体外部
+        for (var i = 0; i < 5; i++) {
+        }
+
+        console.log(i); //5
+
+        // let声明会对迭代变量的奇特声明和修改有效
+        for (let ii = 0; ii < 5; ii++) {
+        }
+        // console.log(ii);    //ReferenceError: ii is not defined
+
+        // 神奇的事，对迭代变量的奇特声明和修改
+        // 退出循环的时候，迭代变量保存的是导致循环退出的值。所有的变量都是i 因而输出的都是同一个值
+        for (var i = 0; i < 5; i++) {
+            setTimeout(() => {
+                console.log(i)
+            }, 0);
+        }       //5 ** 5
+
+        // 使用let声明的时候，因为let在块作用域不能重复命名变量，所以声明的都是不同的值，那么打印出来的值就是我们想要的值
+        for (let ii = 0; ii < 5; ii++) {
+            setTimeout(() => {
+                console.log(ii);
+            }, 0);
+        }  // 0 1 2 3 4 
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

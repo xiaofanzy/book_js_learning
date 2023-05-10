@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /* 数据类型 */
+        // typeof 返回类型
+        let message = "som string";
+        console.log(typeof (message));
+
+        //当声明的对象没有初始化的时候，相当于就是undefined值；
+        let mes;
+        console.log(mes);   //undefined
+        console.log(mes == undefined);   //true
+        //当没有声明的时候，会报错，当没有初始化的时候，会默认是undefined
+        console.log(mes);
+        // console.log(age);   //Uncaught ReferenceError: age is not defined
+
+        // 没有声明和没有初始化，对他进行typeof的操作的时候，都是返回undefined
+        console.log(typeof age);    //undefined
+        console.log(typeof mes);    //undefined
+
+        // 我们建议，对变量的声明首先进行初始化，这样就能发现到底是未声明，还是未被初始化；
+        // 我们一定要明确自己想检测的就是undefined的值，而不仅仅是假值；
+        if (message) {
+            console.log('input...')
+        }
+        if (!message) {
+            console.log('input...')
+        }
+        // if (age) {
+        //     console.log('input...')
+        // }
+
+
+        // 2. null null本质上就是一个空指针对象；
+        let car = null;
+        console.log(typeof car);    //object
+        // 我们建议使用null来初始化，这个原因就是我们判断是不是null就可以判断是不是重新赋予了对象引用；
+        if (car != null) {
+
+        }
+
+        // undefined 值是null值的派生对象，
+        console.log(null == undefined);
+
+        // 3. boolean 
+        // 这两个值不等同于1 0 但是 0 值可以转换为FALSE值；
+        /* 
+            非空String 、非0数值、 任意对象、 非undefined的值都会转换为true的值；
+            空字符串 0 nan null undefined 都会转换为false
+        */
+        let me = "Hello World"
+        if (me) {
+            console.log("Value is True");
+        }
+
+        //  4. number
+        // 01 十进制， 正常
+        // 02 八进制 0开头 后面是相应的八进制数字
+        let octaNum1 = 070;
+        // let octaNum2 = 079; //8进制，所以无效
+        let octaNum3 = 08;
+
+        // 03 十六进制 0x开头 后面是0-9 以及 A-F
+        let hexNum1 = 0xA
+        let hexNum2 = 0x1f
+
+        // +0 -0 任何情况下都是相同的；
+
+        // 4.1 浮点值
+        // 浮点数的存储空间是整数的两倍，所以总会把值转换为整数；
+        let floatNum1 = 10.0 //将转换为10存储
+
+        // 浮点数精度可以高达17位，但是算数计算远不如整数精确
+        let a = 0.1, b = 0.2;
+        console.log(a + b == 0.3)   //false
+
+        // 4.2 值的范围
+        console.log(Number.MAX_VALUE);
+        console.log(Number.MIN_VALUE);
+        //通过ifFinite判断是不是有效范围内
+        console.log(isFinite(a));
+
+        // Nan 不是数值，表示本来要返回数值的操作失败了；
+        console.log(0 / 0);
+        // 但是分子是非0值，分母是0的话，则会返回Infinity / -Infinity
+        console.log(5 / 0);
+        console.log(-5 / 0);
+        // nan 的所有操作都返回nan，连续多步计算中可能是个问题，
+        // NaN 不等于任何值，包括他自己
+        console.log(NaN == NaN) //false
+        //当不是NaN的变量传递给isNaN的时候，会导致isNaN是true,否则是false
+
+        console.log(isNaN(NaN));
+
+        //数值转换：
+        /* 
+            1. 布尔值 FALSE 0 TRUE 1
+            2. 数值 直接返回
+            3. null 返回0
+            4. undefined  返回NaN
+            5. 字符串 
+                1. 如果包函数值，则转换为十进制数
+                2. 如果是浮点数，则转换为浮点值；
+                3. 如果字符串包含 0xf 则转换为十六进制
+                4. 如果空字符串，则返回0
+                5. 其他，返回NaN;
+            6. 对象：
+                调用valueof方法，如果是nan 则调用toString()方法， 否则按照上述规则转换
+
+
+        */
+        console.log(Number('11'));
+        console.log(Number('To string'));
+
+        // parseInt函数， 返回第一个字符是数值的整数形式，如果第一个不是数字，则返回NaN，
+        // 如果是浮点数，则返回整数部分，如果是数字+字母的形式，则舍去字母，只留下数字部分
+        console.log(parseInt("1234blue"));
+
+        // parseInt 可以接受第二个参数，作为指定底数，
+        console.log(parseInt('0xAF', 16));
+
+        //parseFloat 类似，检测到第二个小数点停止
+        console.log(parseFloat('22.3.5'));
+
+        // 3.4.6 String类型
+        //  1.字符字面量
+        let text = "This is the letter sigma: \u03a3.";
+        console.log(text);
+        console.log(text.length);
+
+        //字符串的特点：1.不可变、
+
+        // 转换为字符串 ： toString()
+        // null 和undefined 没有tostring方法；
+        // 可以使用tostring方法的时候，那么调用该方法返回结果，如果为null则返回null，如果为undefined 就返回undefined
+        // age.toString();
+
+        // 模板字面量
+        let mytemplateLiteral = `first line
+                                 second line`;
+        console.log(mytemplateLiteral);
+
+        // 字符串插值
+        let value = 5;
+        let exponet = 'second';
+        let interpolatedString = `${value} to the ${exponet} power is ${value * value}`;
+        console.log(interpolatedString);
+
+        //可以在插值法里面插入自己之前的值
+        function capitalize(word) {
+            return `${word[0].toUpperCase()}${word.slice(1)}`;
+        }
+
+        console.log(`${capitalize('hello')},${capitalize('world')}`);
+        //模板也可以插入自己以前的值
+
+        function append() {
+            value = `${value}abc`;
+            console.log(value);
+        }
+        append();
+        append();
+        append();
+
+        //模板字面朗标签函数
+        a = 6; b = 9;
+        function simpleTag(strings, aValExpression, bValExpression, SumValExpression) {
+            console.log(strings);
+            console.log(aValExpression);
+            console.log(bValExpression);
+            console.log(SumValExpression);
+
+            return 'foolbar';
+        }
+
+        let untageResult = `${a} + ${b} = ${a + b}`;
+        let taggedResult = simpleTag`${a} + ${b} = ${a + b}`;
+        console.log(taggedResult);
+
+        function simpleTags(string, ...expression) {
+            console.log(string);
+            for (const expr of expression) {
+                console.log(expr);
+            }
+
+            return "foolbar";
+        }
+
+        taggedResult = simpleTags`${a} + ${b} = ${a + b}`;
+        console.log(taggedResult);
+
+        // 原始字符串 可以使用String.raw标签函数。
+        console.log(`\u00A9`);
+        console.log(String.raw`\u00A9`);
+
+        // 通过raw函数获取每个字符串的原始内容
+        function printRaw(strings) {
+            console.log('Actual characters:');
+            for (const string of strings) {
+                console.log(string);
+            }
+
+            for (const string of strings.raw) {
+                console.log(string);
+            }
+
+            return 'foolbar';
+        }
+
+        printRaw`\u00A9${'and'}\n`;
+
+        // Symbol类型
+        // 注意这一句， symbol 符号就是用来创建唯一记号，进而用作非字符串形式的对象属性；
+        // 1. 符号的基本用法
+        let sym = Symbol();
+        console.log(typeof sym);
+
+        //可以加入一个描述符，这个描述符，可以调式代码，但是与标识无关
+        let generaicSymbol = Symbol();
+        let otherGeneraicSymbol = Symbol();
+        //  这个是创建普通符号
+        let foogeneraicSymbol = Symbol('foo');
+        let otherFooSymbol = Symbol('foo');
+        console.log(generaicSymbol == otherGeneraicSymbol);
+        //这下面虽然都加了标识符，但是不代表他们是一致的，symbol对象是唯一标识符，不会发生冲突的现象；
+        console.log(foogeneraicSymbol == otherFooSymbol);
+
+        // symbol对象不能new 直接创建就行；
+
+        //使用全局符号注册表
+        // 对不同的部分需要共享和重用符号实例，可以使用一个字符串作为键，在全局注册表中创建并重用符号；
+        // 对每个字符串都进行幂等性操作，第一次调用生成一个新的符号添加到注册表中，后续使用到字符串的时候会检查注册表，如果存在则返回对应的符号；
+        // 这个是创建全局符号；
+        let foolGlobalSysbol = Symbol.for('foo');
+        let otherfoolSymbol = Symbol.for('foo');
+        console.log(foolGlobalSysbol == otherfoolSymbol);   //true
+
+        // 但是symbol.for 和 symbol('foo')这两个是不同的’
+        console.log(otherfoolSymbol == foogeneraicSymbol);
+
+        //也可以通过keyfor反查这个注册表的变量
+        console.log(Symbol.keyFor(foolGlobalSysbol));  //foo
+
+        // keyFor 必须传入的是符号，不是符号就会报错；
+        // console.log(Symbol.keyFor(12)); // 12 is not a symbol
+
+        //使用符号作为属性
+        let s1 = Symbol('foo'),
+            s2 = Symbol('bar'),
+            s3 = Symbol('baz'),
+            s4 = Symbol('qux');
+
+        let o = {
+            //注意加括号
+            [s1]: "foo val"
+        }
+        console.log(o);
+        o[s1] = 'foo bal';
+        console.log(o);
+
+        Object.defineProperty(o, s2, { value: "bar val" })
+
+        Object.defineProperties(o, {
+            [s3]: { value: 'cal val' },
+            [s4]: { value: 'dal val' }
+        })
+
+        console.log(o);
+
+        //
+        let s5 = Symbol('foo')
+        let s6 = Symbol('bar')
+
+        o = {
+            [s1]: 'foo val',
+            [s2]: 'bar val',
+            baz: 'baz val',
+            qux: 'qux val'
+        }
+
+        // 这两个方法互斥，
+        console.log(Object.getOwnPropertyNames(o));
+        console.log(Object.getOwnPropertySymbols(o));
+        // 返回两种类型的键
+        console.log(Reflect.ownKeys(o));
+
+        o = {
+            [Symbol('foo')]: 'foo val',
+            [Symbol('bar')]: 'bar val'
+        }
+
+        console.log(o);
+
+        let barSymbol = Object.getOwnPropertySymbols(o)
+            .find((symbol) => symbol.toString().match(/bar/));
+        console.log(barSymbol);
+
+        // Symbol.asyncIterator 看不明白
+        // 一个方法，该方法返回对象默认的AsyncIterator，由for-await-of 语句使用
+        class Foo {
+            async *[Symbol.asyncIterator]() { }
+        }
+
+        let f = new Foo();
+        console.log(f[Symbol.asyncIterator]());
+
+        class Emitter {
+            constructor(max) {
+                this.max = max;
+                this.asyncIdx = 0;
+            }
+
+            async *[Symbol.asyncIterator]() {
+                while (this.asyncIdx < this.max) {
+                    yield new Promise((resolve) => resolve(this.asyncIdx++));
+                }
+            }
+        }
+
+        async function asyncCount() {
+            let emitter = new Emitter(4);
+
+            for await (const x of emitter) {
+                console.log(x);
+            }
+
+        }
+
+        asyncCount();
+
+        // Object类型
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preload" href="gibberish.js">
+</head>
+
+<body>
+    <!-- 这里是页面内容 -->
+    <!-- 这里是加载js的方式,这种方式在js渲染页面之前加载内容，优化用户体验 -->
+    <script src="example.js"></script>
+    <script src="example1.js"></script>
+
+    <!-- defer 延迟执行脚本 example2.js 这个文件会在html执行之后才开始执行，只对外部文件有效 -->
+    <script defer src="example2.js"></script>
+
+    <!-- async 异步执行脚本 告诉浏览器立即开始下载，适用于外部文件-->
+    <script async src="example2.js"></script>
+
+    <!-- 动态加载脚本文件 默认是异步加载，
+        1. 异步加载浏览器预加载器是不可见的，所以可以在头部Link一下，让预加载器知道这些请求文件的存在
+    -->
+    <script>
+        let script = document.createElement('script');
+        script.src = 'gibberish.js'
+        script.async = false // 这是为了防止某些浏览器不支持异步加载
+        document.head.appendChild(script)
+    </script>
+
+
+</body>
+
+</html>

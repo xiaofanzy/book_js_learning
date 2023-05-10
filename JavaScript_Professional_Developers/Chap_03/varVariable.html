@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 变量 -->
+    <!-- var -->
+    <script>
+        //声明
+        var message;
+        // 初始化
+        var message = "hi";
+
+        //var 声明的作用域
+        // 声明的var作用域在声明的作用域相同，但是如果省略了var变量，则会形成作用域的提升
+        function test() {
+            var mess;
+            //messages 提升为全局变量
+            messages = "hi"
+        }
+
+        test()
+        //console.log(mess);
+        console.log(messages);
+
+        //多变量声明
+        var message = "hi", found = false, age = 29
+
+        //var 声明提升 把所有的变量声明都拉到函数作用域的顶部；
+        function foo() {
+            // 这里将age变量提升到最前面执行；
+            console.log(age);
+            var age = 44;
+        }
+
+    </script>
+
+
+</body>
+
+</html>

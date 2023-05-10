@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATE</title>
+</head>
+
+<body>
+    <script>
+        /* Date : 创建日期对象 */
+        let now = new Date();
+
+        // Date.parse() 方法表示接受一个日期的字符串参数，将其转换为毫秒数
+        // 如果不是日期，则会返回NaN 直接传也是会调用parse函数的；
+        let someDate = new Date(Date.parse("May 23, 2019"));
+        console.log(someDate);
+
+        someDate = new Date("5/23/2020");
+
+        // Date.UTC 参数是 必填 年， 0起始月份， 非必填：日（默认是1），时分秒毫秒（默认都是0）；
+        someDate = Date.UTC(2000, 0);
+        console.log(someDate);  //946684800000
+        // UTC 也是默认调用的，
+        someDate = Date.UTC(2005, 4, 20, 23, 59, 59, 55);
+        console.log(someDate);
+
+        // 返回与浏览器运行本地环境一致的日期和时间；
+        someDate = Date.toLocaleString();
+        console.log(someDate);
+        someDate = Date.toString();
+        console.log(someDate);
+
+        // valueOf返回的是毫秒数，所以我们可以直接比较两个值的大小
+        let date2 = new Date(2019, 11, 1);
+        console.log(date2 > someDate);  //false
+
+        // 日期格式化方法：
+        console.log(date2.toDateString()); //Sun Dec 01 2019
+        console.log(date2.toTimeString());  //00:00:00 GMT+0800 (中国标准时间)
+        console.log(date2.toLocaleDateString());    //2019/12/1 月日年
+        console.log(date2.toLocaleTimeString());    //00:00:00  时分秒
+        console.log(date2.toUTCString());   //Sat, 30 Nov 2019 16:00:00 GMT
+
+        console.log(date2.getDate());   //1
+        console.log(date2.getUTCDate());    //30
+
+        // RegExp 
+        /*
+            g 全局模式：表示查找字符串的全部内容，而不是找到第一个匹配的内容就结束
+        */
+        let pattern1 = /at/g;   //找出所有的at
+
+        /* i 不区分大小写，表示在查找匹配时忽略 pattern 和字符串的大小写  */
+        let pattern12 = /[bc]at/i;  // 匹配第一个"bat"或"cat"，忽略大小写
+        pattern2 = /.at/gi; //匹配所有以"at"结尾的三字符组合，忽略大小写
+        let pattern3 = /\[bc\]at/i; //匹配第一个"[bc]at"，忽略大小写
+        pattern2 = /\.at/gi;     //匹配所有".at"，忽略大小写
+
+        /* m : 多行模式，表示查找到一行文本末尾时会继续查找 */
+
+        /* y ：粘附模式，表示只查找从 lastIndex 开始及之后的字符串 */
+
+        /* u ：Unicode 模式，启用 Unicode 匹配 */
+
+        /* s ： dotAll 模式，表示元字符 . 匹配任何字符（包括 \n 或 \r ） */
+
+        // 可以选择性的修改他们的标记
+        const re1 = /cat/g;
+        const re2 = new RegExp(re1, "i");
+        console.log(re2);   ///cat/i
+
+        // RegExp 实例属性：
+        let pattern = /.at/gi;
+        console.log(pattern.global);   /* global ：布尔值，表示是否设置了 g 标记 */
+        console.log(pattern.ignoreCase);    /* ignoreCase ：布尔值，表示是否设置了 i 标记。 */
+        console.log(pattern.unicode);   /* unicode ：布尔值，表示是否设置了 u 标记 */
+        console.log(pattern.sticky);    /* sticky ：布尔值，表示是否设置了 y 标记。 */
+        console.log(pattern.lastIndex); /* 整数，表示在源字符串中下一次搜索的开始位置，始终从 0 开始。 */
+        console.log(pattern.multiline); /* 布尔值，表示是否设置了 m 标记 */
+        console.log(pattern.dotAll);    /* dotAll ：布尔值，表示是否设置了 s 标记。 */
+        console.log(pattern.source);    /*  正则表达式的字面量字符串（不是传给构造函数的模式字符串），没有开头和结尾的
+斜杠。*/
+        console.log(pattern.flags);  /* gi */   /* 正则表达式的标记字符串。始终以字面量而非传入构造函数的字符串模式形式返回（没
+有前后斜杠）。 */
+
+        let text = "mom and dad and baby";
+        let pattern4 = /mom( and dad( and baby)?)?/gi;
+
+        let matches = pattern4.exec(text);
+        console.log(matches.index);
+        console.log(matches.input);
+        console.log(matches[0]);
+        console.log(matches[1]);    //这个是根据上一个匹配在匹配的；
+        console.log(matches[2]);
+
+        let text1 = "cat, bat, sat, fat";
+        let pattern5 = /.at/;
+        let pattern6 = /.at/g;
+
+        let matches1 = pattern5.exec(text1);
+        let matches2 = pattern6.exec(text1);
+
+        // 对于没有设置全局标记的而言，无论调用多少次。都是从0开始，查找到就结束了
+        console.log(matches1.index);
+        console.log(matches1[0]);
+        console.log(pattern5.lastIndex);
+
+        // 对于设置了全局标记的而言，查找到之后，下次会从当前位置往下搜索；
+        console.log(matches2.index);
+        console.log(matches2[0]);
+        console.log(pattern6.lastIndex);
+
+        matches2 = pattern6.exec(text1);    //这玩意每次执行才会更新；
+        console.log(matches2.index);
+        console.log(matches2[0]);
+        console.log(pattern6.lastIndex);
+
+        /* 粘附标记 y 这个就是从起始位置查找匹配项，粘附标记 会覆盖全局标记 */
+        let pattern7 = /.at/y;
+
+        let matches3 = pattern7.exec(text1);
+        console.log(pattern7.index);
+        console.log(pattern7[0]);
+        console.log(pattern7.lastIndex);
+
+        text = "000-00-0000";
+        pattern = /\d{3}-\d{2}-\d{4}/;
+
+        if (pattern.test(text)) {
+            console.log("The pattern was matched");
+        }
+
+        /* RegExp 构造函数属性
+            input  最后搜索的字符串 $_
+            lastMatch 最后匹配的文本 $&
+            lastParen 最后匹配的捕获组（非标准特性） $+
+            leftContext input 字符串中出现在 lastMatch 前面的文本 $`
+            rightContext input 字符串中出现在 lastMatch 后面的文本 $'
+        */
+        let text2 = "This has been a short summer";
+        let pattern8 = /(.)hort/g;
+        if (pattern8.test(text)) {
+            console.log(pattern8.input);
+            console.log(RegExp.$_);
+        }
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

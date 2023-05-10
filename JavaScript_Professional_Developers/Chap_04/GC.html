@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>垃圾回收</title>
+</head>
+
+<body>
+    <script>
+        /* 标记清理：
+            1.当变量进入上下文中的时候，这个变量会被存在于上下文的标记中，只有当离开上下文的时候，才会被释放
+            2.标记方式有很多：
+                1. 翻转某一位；
+                2. 可以维护在上下文中和不在上下文中的两个变量列表，可以从变量从一个列表转移到另一个列表；
+                3. 当GC运行的时候，会标记所有变量，然后将所有上下文中的对象变量以及引用变量都给去掉，等于是总数- 已使用数 = 未使用数，
+                    这时候标记的就是需要垃圾回收的变量了；
+            
+            引用计数：
+                1.简而言之就是当被引用的时候，引用数+1，如果解除引用的时候， 引用数 -1 当引用数 =0 的时候，代表他可以被回收，
+                但是循环引用的现象，导致这个用的不是太多；
+
+
+
+        */
+
+        // 当造成循环引用的时候，只能通过手工的切断联系才可以
+        let element = document.getElementById("some_elemet");
+        let myObject = new Object();
+        //这样就造成了DOM对象内存永远不会被回收
+        //.element = element;
+        //element.someObject = myObject;
+
+        // 只能手工执行null赋值，切断操作；
+        // myObject.element = null;
+        //element.someObject = null;
+
+        //  可以出发GC的方法；
+        //window.CollectGarbage();
+        //window.opener.collect();
+
+        /* 内存优化策略：
+            1. 使用const 和 let 而少使用 var;尽量不使用var;
+            2. 隐藏类和删除操作：隐藏类是指当两个一模一样的对象，指向的是同意的对象，
+            V8将对象和隐藏类关联起来，以跟踪他们的属性特征；
+        
+        */
+
+        function Article() {
+            this.title = "New";
+        }
+        //A1 A2 这两个共享同一个构造函数和原型，
+        let a1 = new Article();
+        let a2 = new Article();
+        a2.author = "Jake"; //这样就使得两个类对象不同了；
+
+        // 我们如果需要使用V8里面的共享类，那么就需要先创建在补充的方法；
+        function Article(opt_author) {
+            this.title = "Inauguration Ceremony Features Kazoo Band";
+            this.author = opt_author;
+        }
+
+        // 这样a3 a4 就是一样的了；因此可以共享一个隐藏类；
+        let a3 = new Article();
+        let a4 = new Article("Jake");
+
+        // 当删除关键字会导致相同的隐藏类片段
+        // delete a1.author;
+        // 我们使用null赋值的操作，这样可以保持隐藏类不变和继续共享，同时达到删除引用值供垃圾回收的效果；
+        a3.author = null;
+
+        // 3. 内存泄露
+        // 1. 意外声明全局变量
+        // 这个name 会被提升为全局变量，当window不被清理的时候就不会消失
+        function setName() {
+            name = "Jake";
+        }
+
+        // 定时器导致内存泄露，定时器一直执行，会导致name一直被占用
+        let name = "jake";
+        // setInterval(() => {
+        //     console.log(name);
+        // }, 100);
+
+        // 闭包导致内存泄露
+        // 调用outer 就会导致name的内存泄露，只要返回函数存在就不能清理name;
+        let outer = function () {
+            let name = "Jake";
+            return function () {
+                return name;
+            }
+        }
+
+        // 4. 静态分配和能量池；
+        // 如果频繁的使用，会导致频繁的垃圾回收，更加激进；
+        function addVector(a, b) {
+            let resultant = new Object();
+            resultant.x = a.x + b.x;
+            resultant.y = a.y + b.y;
+            return resultant;
+        }
+
+        //解决方案： 我们不要动态的创建矢量对象，可以改成
+        function addVector(a, b, resultant) {
+            resultant.x = a.x + b.x;
+            resultant.y = a.y + b.y;
+            return resultant;
+        }
+
+        //  1. 可以使用对象池的方法
+        // vectorPool 是已有的对象池
+        let v1 = vectorPool.allocate();
+        let v2 = vectorPool.allocate();
+        let v3 = vectorPool.allocate();
+        v1.x = 10;
+        v1.y = 5;
+        v2.x = -3;
+        v2.y = -6;
+        addVector(v1, v2, v3);
+        console.log([v3.x, v3.y]); // [7, -1]
+        vectorPool.free(v1);
+        vectorPool.free(v2);
+        vectorPool.free(v3);
+        // 如果对象有属性引用了其他对象
+        // 则这里也需要把这些属性设置为 null
+        v1 = null;
+        v2 = null;
+        v3 = null;
+
+        //  2. 可以使用数组实现；
+        let vectorList = new Array(100);
+        let vector = new Vector();
+
+    </script>
+</body>
+
+</html>

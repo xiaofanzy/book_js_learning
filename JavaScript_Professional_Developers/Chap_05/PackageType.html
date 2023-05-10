@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原始值包装类型</title>
+</head>
+
+<body>
+    <script>
+        /* boolean number string */
+        let s1 = "some text";   //这行的声明周期只在于这一行，下一行调用的时候，是创建了一个临时的String对象，这等于是副本了；
+        /* 这在内存中执行了下面三步：
+            1. 创建一个String类型的实例；
+            2.调用实例上的特定方法；
+            3.销毁实例；
+        */
+        let s2 = s1.substring(2);
+
+        /*
+            引用类型和原始类型区别在于对象的生命周期，
+            在new实例化引用类型的时候，得到的实例在离开作用域的时候销毁，而主动创建的原始值包装对象则只存在于访问他的那行代码执行期间；
+            意味着不能在运行时不能给原始值添加属性和方法；
+        */
+
+        /* 原始值包装类：typeof : object 所有的包装对象都换转换为true */
+        let obj = new Object("Some text");
+        console.log(obj instanceof String);
+
+        /* new 调用原始值包装类型的构造函数，和调用同名函数不一样 */
+        let value = "25";
+        let number = Number(value);
+        obj = new Number(value);
+        console.log(typeof number);  //number
+        console.log(typeof obj);    //object
+
+        /* 建议不显式使用Boolean对象，因为boolean对象是obj类型，而obj类型，在boolean类型中是恒等于true的 */
+        let falseObject = new Boolean(false);
+        let result = falseObject && true; // falseObject 这个是true,而这个Boolean的值是false;
+        console.log(result);    //true
+
+        let falseValue = false;
+        result = falseValue && true;
+        console.log(result);    //false
+
+        /* typeof 对原始值返回boolean 对 引用值返回Object 
+            Boolean 对象是instanceof 操作返回true,对原始值返回false
+        */
+        console.log(falseObject instanceof Boolean);    //true
+        console.log(falseValue instanceof Boolean); //false 因为这个是原始值；
+
+        /*
+             Number 类型重写了 valueOf() 、 toLocaleString() 和 toString() 方法。 valueOf() 方法返回 Number 对象表示的原始数值，另外两个方法返回数值字符串
+             */
+
+        /* toFixed() 返回指定的数值字符串,多的位数会进行四舍五入 */
+        let num = 10.005;
+        console.log(num.toFixed(2));    //10.00
+
+        /* toExponential() 科学计数法表示,参数代表小数点之后的位数；  */
+        console.log(num.toExponential(1));
+
+        /* toPrecision() 混子，最合理的 */
+        console.log(num.toPrecision(1));    //1e+1
+
+        /* Number类型和 boolean类型同样会存在原始值和引用类型的区别，Number new 的对象是引用类型，instanceof object 而 直接赋值的是原始值，typeof则返回的number */
+
+        /* 是否为整数 */
+        console.log(Number.isInteger(1.00));    // 小数点后面为0会近似于整数
+        console.log(Number.isInteger(1.01));
+
+        /* 是否安全 */
+        console.log(Number.isSafeInteger(2 ** 53 - 1));
+
+        /* String 引用类型 */
+        let strignObject = new String("Hello world");
+        console.log(strignObject.length);   //11
+
+        let message = "abcde";
+        console.log(message.charAt(2)); //c 从0开始
+
+        // 感觉这个使用的少；
+        console.log(String.fromCharCode(0x61, 0x62, 0x63, 0x64, 0x65));
+
+        /* 2. normalize() 方法 这个也随便看下，用到再说*/
+
+        /*
+            3. 字符串操作方法
+        */
+        let stringValue = "hello";
+        //生成一个新的副本对象，不影响stringValue的值
+        result = stringValue.concat(" world");
+
+        // 提取字符串
+        stringValue = "Hello World!";
+        console.log(stringValue.slice(3));
+        // 起始到终止 下面这俩货差不多
+        console.log(stringValue.slice(3, 7));
+        console.log(stringValue.substring(3, 7));
+        // 第二位表示返回的数量
+        console.log((stringValue.substr(3, 7)));
+
+        // substr 当参数为负值的时候，从后往前数，substring方法 会将所有负值参数都转换为0；
+        console.log(stringValue.substring(-3));
+        console.log(stringValue.substr(-3));    //ld!
+
+        /* 字符串位置方法 */
+        console.log(stringValue.lastIndexOf("o"));
+        console.log(stringValue.indexOf("o"));
+
+        // 第二个参数代表从哪个位置开始搜索
+        console.log(stringValue.indexOf("o", 6));
+
+        // 查找所有字符串
+        stringValue = "Lorem ipsum dolor sit amet, consectetur adipisicing elit";
+        let positions = new Array();
+        let pos = stringValue.indexOf("e");
+
+        while (pos > -1) {
+            positions.push(pos);
+            pos = stringValue.indexOf("e", pos + 1);
+        }
+
+        console.log(positions);
+
+        /* 字符串包含方法 可以接受第二个参数，从某一位开始往后查找，前面的忽略*/
+        message = "foobarbaz ";
+        console.log(message.startsWith("foo"));
+        console.log((message.endsWith("baz")));
+        console.log(message.includes("bar"));
+        console.log(message.includes("bar", 3));
+
+        /* trim 删除前后空格 */
+        console.log(message.trim());
+        console.log(message);
+        console.log(message.trimLeft());
+
+        /* padStart() 和 padEnd() 方法 以指定字符填充到指定位数 */
+        console.log(message.padStart(20, '1'));
+
+        /* 9. 字符串迭代与解构
+            字符串原型里面暴露了一个@@iterator方法，可以迭代每个字符串
+        */
+        message = "abc";
+        let stringIterator = message[Symbol.iterator]();
+        console.log(stringIterator.next());
+        console.log(stringIterator.next());
+        console.log(stringIterator.next());
+        //done 代表是否到达末尾
+        console.log(stringIterator.next());
+        console.log(stringIterator.next());
+
+        for (const c of "abcde") {
+            console.log(c);
+        }
+
+        console.log([...message]);
+
+        /* 字符串大小写转换 */
+        // console.log(stringValue.toLowerCase());
+        // console.log(stringValue.toUpperCase());
+        // // 这俩是特定地区实现的；
+        // console.log(stringValue.toLocaleLowerCase());
+        // console.log(stringValue.toLocaleUpperCase());
+
+        /* 匹配犯法 */
+        let text = "car,bat,sat,fat";
+        let pattern = /.at/g;
+        let matches = text.match(pattern);
+        console.log(matches.index);
+        console.log(pattern.lastIndex);
+        console.log(matches[1]);
+
+        pos = text.search(/.at/);
+        console.log(pos);   //找到返回下标索引，找不到返回-1
+
+        //replace如果传入的是字符串，就是把字符串替换为第二个参数，如果是正则表达式，就先查找正则表达式的结果；
+        result = text.replace(/at/g, "ccc");
+        console.log(text);
+        console.log(result);
+
+        /* 装逼操作来了必学：
+            $n 代表捕获组的字符串
+        */
+        result = text.replace(/(.at)/g, "word($1)");
+        console.log(result);
+
+        // 可以接受第二个参数，这个参数是个function ;
+        //  function args 1 : 匹配的字符串
+        //  function args 2 : 匹配的开始位置
+        //  function args 3 : 整个字符串；
+        function htmlEscape(text) {
+            return text.replace(/[<>"&]/g, function (match, pos, originalText) {
+                switch (match) {
+                    case "<":
+                        return "&lt;";
+
+                }
+            })
+        }
+
+        console.log(htmlEscape("<p class=\"greeting\">Hello world!</p>"));
+
+        // 分割
+        let colorText = "red,blue,green,yellow";
+        let color1 = colorText.split(",");
+        let color2 = colorText.split(",", 2);
+        console.log(color1, color2);
+
+        stringValue = "yellow";
+        console.log(stringValue.localeCompare("brick")); // 1
+        console.log(stringValue.localeCompare("yellow")); // 0
+        console.log(stringValue.localeCompare("zoo")); // -1 这个负数代表z 在y之后
+
+        function determineOrder(value) {
+            let result = value.localeCompare(stringValue);
+            if (result > 0) {
+                console.log(`the string ${value} is come after the string yellow`);
+            } else if (result == 0) {
+                console.log(`the string ${value} is equal to string 'yellow'`);
+            }
+
+        }
+
+        determineOrder("yellow");
+        determineOrder("bellow1");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
