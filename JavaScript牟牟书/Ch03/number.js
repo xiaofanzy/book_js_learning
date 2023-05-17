@@ -51,3 +51,6 @@ console.log(0 === 0n);  //false
 //但是math对象不接受bigint的操作；
 
 
+console.log(Number([]));    // 0
+console.log(Number([99]));  //99
+
