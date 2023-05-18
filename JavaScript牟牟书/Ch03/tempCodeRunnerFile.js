@@ -1,4 +1,2 @@
-r = `do you love 
-me`;
-console.log(r);
 
+// 当剩余的值收集到一个

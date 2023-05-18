@@ -54,3 +54,25 @@ console.log(x, y);  //1 [ 2, 3, 4 ]
 // 嵌套赋值
 let [a, [b, c]] = [1, [2, 2.5], 3];
 
+let [first, ...rest] = "hello world";
+console.log([first, rest]);
+
+// 右边只要是变量名列表，以逗号分割的就行；
+let transparent = { r1: 0.0, g: 0.0, b1: 0.0, a: 0.0 };
+let { r1, g, b1 } = transparent;
+//但是要保证右边的变量名和左边的变量名相同
+console.log(r1, g, b1);
+
+// 简化全局函数；
+// 这里将sin 就= Math.sin 了 ，意思就是全局变量中的math.sin 赋值给了sin;
+const { sin, cos, tan } = Math;
+
+let points = [{ x: 1, y: 2 }, { x: 3, y: 4 }];
+let [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points;
+//通过，表示这个值是正确的；
+console.assert(x1 === 1 && y1 === 2 && x2 === 3 && y2 === 4);
+
+
+
+
+
