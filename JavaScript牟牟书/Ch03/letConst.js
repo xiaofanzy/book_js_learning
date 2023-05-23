@@ -72,6 +72,11 @@ let [{ x: x1, y: y1 }, { x: x2, y: y2 }] = points;
 //通过，表示这个值是正确的；
 console.assert(x1 === 1 && y1 === 2 && x2 === 3 && y2 === 4);
 
+// 复杂解构
+let points2 = [{ x: x1, y: y1 }, { x: x2, y: y2 }];
+// console.assert(points2 == points);
+
+
 
 
 
