@@ -188,3 +188,14 @@ with (document.forms[0]) {
     address.value = "";
     email.value = "";
 }
+
+// 可以等同于
+// let f = document.forms[0];
+// f.name.value = "";
+
+//export
+const PI = Math.PI;
+const TAU = 2 * PI;
+
+export { PI, TAU };
+
