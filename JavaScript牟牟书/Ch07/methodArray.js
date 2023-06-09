@@ -129,6 +129,65 @@ a = [NaN, NaN, NaN];
 console.log(a.indexOf(NaN));
 console.log(a.includes(NaN));
 
+// sort 排序
+a = ["banana", "apple", "mango"];
+console.log(a.sort());
+
+// sort 接受第二个参数，第二个参数返回一个小于0的方法
+a = [33, 4, 111, 222];
+console.log(a.sort());
+a.sort(function (x, y) {
+    return x - y;
+});
+a.sort((x, y) => x - y);
+
+a = ["ant", "bear", "cat"];
+console.log(a.sort());
+console.log(a.sort(function (x, y) {
+    aa = x.toLowerCase();
+    b = y.toLowerCase();
+    if (aa < b) return -1;
+    if (aa > b) return 1;
+    return 0;
+}));
+console.log(a.sort((x, y) => x.toLowerCase() - y.toLowerCase()));
+
+//reverse() 方法； 反序
+a = [1, 2, 3, 4, 5];
+console.log(a.reverse());
+
+/**
+ * 数组到字符串的转换
+ */
+//join 
+a = [1, 2, 3, 4, 5];
+a.join();
+console.log(a.join('-'));    // 中间通过-间隔
+b = new Array(10);
+console.log(b.join("-"));
+
+// toString()方法
+[1, 2, 3].toString();   // "1,2,3"
+["a", "b", "c"].toString();   // "a,b,c"
+
+/**
+ * 静态数组函数
+ */
+//判断是不是数组 Array.isArray();
+console.log(Array.isArray([]));
+console.log(Array.isArray({}));
+
+/**
+ * 类数组对象
+ */
+
+
+
+
+
+
+
+
 
 
 
