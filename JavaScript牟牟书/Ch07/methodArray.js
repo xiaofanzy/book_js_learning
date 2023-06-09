@@ -178,8 +178,46 @@ console.log(Array.isArray([]));
 console.log(Array.isArray({}));
 
 /**
- * 类数组对象
+ * 类数组对象 可以通过便利数组的方式遍历他们
  */
+
+a = {};
+let i = 0;
+while (i < 10) {
+    a[i] = i;
+    i++;
+}
+a.length = i;
+let total = 0;
+for (let j = 0; j < a.length; j++) {
+    total += a[j];
+}
+console.log(total);
+
+function isArrayLike(obj) {
+    if (obj && typeof obj === 'object' && Number.isFinite(o.length) && o.length >= 0 && Number.isInteger(o.length) && o.length < 4294967295) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+// 泛型方法 Array.prototype 无法直接嗲用他们的数组方法，可以通过function.call方法间接调用
+a = ["a", "b", "c"];
+Array.prototype.map.call(x => x.toLowerCase());
+
+/**
+ * 作为数组的字符串
+ */
+let s = "test";
+s.charAt(0);
+s[1];
+
+// 我们可以通过Array.propertype的方法高效使用字符串
+console.log(Array.prototype.join.call("JavaScript", " "));
+
+
 
 
 

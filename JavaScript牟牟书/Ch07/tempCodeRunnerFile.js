@@ -1,1 +1,1 @@
-console.log(Array.isArray({}));
+console.log(Array.prototype.join.call("JavaScript", " "));
