@@ -64,6 +64,7 @@ probability = factorial(5) / factorial(3);
 
 // 条件式调用
 const params = ((x, y) => { return x + y; })?.(10, 20);
+console.log(params);
 
 // 定义并调用函数
 const strict = (function () { return !this; })();
@@ -72,12 +73,43 @@ const strict = (function () { return !this; })();
 
 
 // 方法调用
+/**
+ * 方法就是js的函数，只不过他保存为对象的属性而已
+ */
 let calculator = {
     operand1: 1,
     operand2: 2,
     add() {
+        this.result = this.operand1 + this.operand2;
+    }
+};
+calculator.add();
+console.log(calculator.result);
 
+// 方法调用可能设计到更复杂的属性访问表达式
+// customer.surname.toUpperCase();
+// f().m();
+
+let o = {
+    // 方法， 这里this 指向的是调用它的对象o
+    m: function () {
+        let self = this;
+        console.log(this === o);;
+        f();
+
+        // 这里是当作函数使用，this 指向的就是全局变量或者是undefined;
+        function f() {
+            console.log(this === o);
+            console.log(self === o);    //我们通过使用this == self 做了一次桥接，然后获取到指向o的this 值
+        }
+        console.log("===============");
+        // 或者采用下面两种方式
+        const f1 = () => { console.log(this === 0); };
+        const f2 = (function () { console.log(this === 0); }).bind(this);
     }
 }
+o.m();
+
+
 
 
