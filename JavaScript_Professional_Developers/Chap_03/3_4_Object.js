@@ -262,3 +262,181 @@ let barSymbol = Object.getOwnPropertySymbols(o2).find((symbol) =>
   symbol.toString().match(/foo/)
 );
 console.log(barSymbol);
+console.log("-----------------");
+// TODO Symbol.asyncIterator 一个方法,该方法返回对象默认的asyncIterator,有for -await-of 语句使用,实现异步迭代器
+//
+class Foo {
+  async *[Symbol.asyncIterator]() {}
+}
+
+let f = new Foo();
+console.log(f[Symbol.asyncIterator]());
+
+class Emitter {
+  constructor(max) {
+    this.max = max;
+    this.asyncIdx = 0;
+  }
+
+  async *[Symbol.asyncIterator]() {
+    while (this.asyncIdx < this.max) {
+      yield new Promise((resolve) => resolve(this.asyncIdx++));
+    }
+  }
+}
+
+async function asyncCount() {
+  let emitter = new Emitter(5);
+
+  for await (const x of emitter) {
+    console.log(x);
+  }
+}
+
+asyncCount();
+console.log("---------------------");
+//  一个方法,该方法决定一个构造器兑现是否认可一个对象是他的实例.
+function Foo1() {}
+let f1 = new Foo1();
+console.log(f1 instanceof Foo1);
+console.log("---------------------");
+console.log(Foo1[Symbol.hasInstance](f1));
+
+// 可以通过静态方法重新定义这个类
+// 注意这个是类,不是方法;
+class Bar {
+  static [Symbol.hasInstance]() {
+    return false;
+  }
+}
+
+let bar = new Bar();
+console.log(bar instanceof Bar);
+
+// Symbol.isConcatSpreadable 一个布尔值,如果是true,则意味着对象可以使用Array.protopyte.concat()打平其数组元素
+// Array.protopyte.concat() 接受一个数组,将其拼接成数组实例
+let initial = ["foo"];
+let array = ["bar"];
+console.log(array[Symbol.isConcatSpreadable]); //undefined
+console.log(initial.concat(array)); // false
+console.log("---------------------F");
+array[Symbol.isConcatSpreadable] = false;
+console.log(initial.concat(array));
+console.log("---------------------T");
+array[Symbol.isConcatSpreadable] = true;
+console.log(initial.concat(array));
+// 但是当不是类数组的情况下,就会被忽略;
+let otherObject = new Set().add("qux");
+console.log(array[Symbol.isConcatSpreadable]);
+console.log(initial.concat(otherObject));
+otherObject[Symbol.isConcatSpreadable] = true;
+console.log(initial.concat(otherObject));
+
+//  一个方法,该方法返回对象默认的迭代器,for-of语句使用
+class Emitters {
+  constructor(max) {
+    this.max = max;
+    this.idx = 0;
+  }
+
+  *[Symbol.iterator]() {
+    while (this.idx < this.max) {
+      yield this.idx++;
+    }
+  }
+}
+
+function count() {
+  let emitter = new Emitters();
+  for (const x of emitter) {
+    console.log(x);
+  }
+}
+
+count();
+
+// 一个曾泽表达式,该方法用正则表达式去匹配字符串,由string.prototype.match()方法使用
+class Footmatcher {
+  static [Symbol.match](target) {
+    return target.includes("foo");
+  }
+}
+
+console.log("foobar".match(Footmatcher));
+console.log("barbaz".match(Footmatcher));
+
+class StringMatcher {
+  constructor(str) {
+    this.str = str;
+  }
+
+  [Symbol.match](target) {
+    return target.includes(this.str);
+  }
+}
+
+let fooMatcher = new StringMatcher("foo");
+console.log("foobar".match(fooMatcher));
+console.log("barbaz".match(fooMatcher));
+
+// Sybmol.replace 一个方法,该方法用于替换字符串中匹配的子串,由String.prototype.replace()方法使用
+class FOoReplacer {
+  static [Symbol.replace](target, repalcement) {
+    return target.split("foo").join(repalcement);
+  }
+}
+
+console.log("barfoobaz".replace(FOoReplacer, "qux"));
+
+// Symbol.search 一个方法,该方法用于返回字符串中匹配的索引,由String.prototype.search()方法使用
+class FooSearcher {
+  static [Symbol.search](target) {
+    return target.indexOf("foo");
+  }
+}
+console.log("---------------------");
+console.log("foobar".search(FooSearcher));
+console.log("barbaz".search(FooSearcher));
+
+class StringSerarcher {
+  constructor(str) {
+    this.str = str;
+  }
+
+  [Symbol.search](target) {
+    return target.indexOf(this.str);
+  }
+}
+console.log("------------------------------");
+console.log("foobar".search(new StringMatcher("foo")));
+console.log("------------------------------");
+
+// 一个函数值,该函数作为创建派生对象的构造函数;
+// 说白了就是避免暴露继承类;
+class Bars extends Array {}
+class Bazs extends Array {
+  static get [Symbol.species]() {
+    return Array;
+  }
+}
+
+let barz = new Bars();
+console.log("---------------------1");
+console.log(barz instanceof Array);
+let bazz = new Bazs();
+bazz = bazz.concat("baz"); //
+console.log(bazz instanceof Bazs);
+
+// 8 Object 类型
+let oo = new Object();
+
+/**
+ * object 都有属性和方法;
+ * 1. constructor,指向用于创建当前对象的函数
+ * 2. hasOwnProperty() 检查属性是否在实例中,而不是原型中
+ * 3. isPrototypeOf() 检查对象是否是另一个对象的原型
+ * 4. propertyIsEnumerable() 检查给定的属性是否可以使用for-in枚举
+ * 5. toLocaleString() 返回对象的字符串表示,与执行环境的地区对应
+ * 6. toString() 返回对象的字符串表示
+ * 7. valueOf() 返回对象的字符串,数值或布尔表示
+ */
