@@ -427,6 +427,73 @@ let bazz = new Bazs();
 bazz = bazz.concat("baz"); //
 console.log(bazz instanceof Bazs);
 
+//Symbol.split 一个正则表达式,该方法在匹配转给您则表达式的索引位置拆分字符串,由 String.protopyte.split() 方法使用
+class FooSpliter {
+  static [Symbol.split](target) {
+    return target.split("foo");
+  }
+}
+console.log("---------------------2");
+console.log("barfoobaz".split(FooSpliter));
+
+class StringSpliter {
+  constructor(str) {
+    this.str = str;
+  }
+
+  static [Symbol.split](target) {
+    return target.split(this.str);
+  }
+}
+
+console.log("barfoobaz".split(new StringSpliter("foo")));
+
+//Symbol.toPrimitive 一个方法,该方法讲对象转换为响应的原始值;
+class Bar2 {
+  constructor() {
+    this[Symbol.toPrimitive] = function (hint) {
+      switch (hint) {
+        case "number":
+          return 3;
+          break;
+        case "string":
+          return "String bar";
+          break;
+        case "default":
+        default:
+          return "default bar";
+          break;
+      }
+    };
+  }
+}
+console.log("---------------------3");
+let barrr = new Bar2();
+console.log(3 - barrr);
+console.log(3 + barrr);
+console.log(String(barrr));
+console.log("---------------------4");
+
+//Symbol.toStringTag 一个字符串,该字符串用于创建对象的默认字符串描述
+
+console.log(barrr.toString());
+class Bar3 {
+  constructor() {
+    this[Symbol.toStringTag] = "bar"; //[object Object]
+  }
+}
+
+let barr3 = new Bar3();
+console.log(barr3.toString()); //[object bar]
+
+//Symbol.unscopables 一个对象,该对象所有的以及继承的属性,都会从关联对象的with环境中绑定中删除;
+let ooo = { foo: "bar" };
+with (ooo) {
+  console.log(foo);
+}
+
+// TODO 看完了,但是没看明白,问了GPT还不行,等看完再继续吧;
+
 // 8 Object 类型
 let oo = new Object();
 
