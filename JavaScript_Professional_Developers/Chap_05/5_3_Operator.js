@@ -168,3 +168,29 @@ function htmlEscape(text) {
     }
   });
 }
+
+let colorText = "red,blue";
+let color1 = colorText.split(",");
+console.log(color1);
+color1 = colorText.split(",", 1); // 第二个参数是截取几位
+console.log(color1);
+
+//localCompare 方法
+// 按照首字母排序,一样返回0 不一样首字母在前的返回1
+stringValue = "yellow";
+console.log(stringValue.localeCompare("brick")); //1 y > b
+console.log(stringValue.localeCompare("yellow"));
+console.log(stringValue.localeCompare("zoo"));
+
+function determineOrder(value) {
+  let result = stringValue.localeCompare(value);
+  if (result < 0) {
+    console.log(`the String 'yellow' comes before the string ${value}`);
+  } else if (result > 0) {
+    console.log(`the String 'yellow' comes before the string ${value}`);
+  } else {
+    console.log(`the String 'yellow' comes before the string ${value}`);
+  }
+}
+
+determineOrder("brick");
