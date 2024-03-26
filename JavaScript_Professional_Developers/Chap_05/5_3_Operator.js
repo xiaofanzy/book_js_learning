@@ -77,3 +77,94 @@ console.log(stringResult);
 console.log(stringResult.slice(3, 7));
 // substring 同理;
 console.log(stringResult.substring(3, 7)); //lo w
+
+stringValue = "Hello World";
+console.log(stringValue.indexOf("o")); //4
+console.log(stringValue.lastIndexOf("o")); //7
+
+stringValue = "Lorem ipsum dolor sit amet, consectetur adipisicing elit";
+let positions = new Array();
+let pos = stringValue.indexOf("e");
+while (pos > -1) {
+  positions.push(pos);
+  pos = stringValue.indexOf("e", pos + 1);
+}
+console.log(positions);
+
+// 字符串包含方法;
+let message = "foobarbaz";
+console.log(message.startsWith("foo"));
+console.log(message.endsWith("bar"));
+console.log(message.includes("bar"));
+console.log(message.includes("bar", 5));
+
+// trim 方法 删除
+stringValue = "   Hello World ";
+console.log(stringValue.trim());
+console.log(stringValue.trimLeft());
+console.log(stringValue.trimRight());
+
+// repeat 方法; 重复
+stringValue = "na ";
+console.log(stringValue.repeat(3) + "batman");
+
+// padStart() 填充字符 第二个参数有就填充,没有就填充空格
+stringValue = "foo";
+console.log(stringValue.padStart(5, ".")); // a 一共多少位 b 其余位数填充指定字符
+console.log(stringValue.padEnd(8, "bar")); // 当填充到指定位置的时候,多余的直接舍弃
+
+// 字符串迭代和解构
+message = "abc";
+let stringIterator = message[Symbol.iterator]();
+console.log(stringIterator.next());
+console.log(stringIterator.next());
+console.log(stringIterator.next());
+console.log(stringIterator.next());
+
+for (const c of "abcde") {
+  console.log(c);
+}
+
+console.log([...message]);
+
+// 自妇产大小写转换
+stringValue = "hello world";
+console.log(stringValue.toLocaleLowerCase());
+console.log(stringValue.toUpperCase());
+console.log(stringValue.toLocaleUpperCase());
+console.log(stringValue.toLowerCase());
+
+// 字符串模式匹配方法;
+let text = "cat, bat, sat, fat";
+let pattern = /.at/;
+
+let matches = text.match(pattern);
+let matchs = pattern.exec(text);
+console.log(matchs.input);
+console.log(matches.index);
+console.log(matches.lastIndex);
+console.log(matches[0]);
+
+text = "cat,bat,sat,fat";
+pos = text.search(/at/);
+console.log(pos);
+
+// replace
+result = text.replace(/at/g, "cound");
+console.log(result);
+
+result = text.replace(/(.at)/g, "word ($1)");
+console.log(result);
+
+// replace 第二个参数可以接受一个函数,function(a,b,c) a代表匹配的字符串, b代表匹配的字符串的起始位置, c代表原始字符串
+function htmlEscape(text) {
+  return text.replace(/[<>]&/g, function (match, pos, orginText) {
+    switch (match) {
+      case "<":
+        return "&lt;";
+        break;
+      default:
+        break;
+    }
+  });
+}
