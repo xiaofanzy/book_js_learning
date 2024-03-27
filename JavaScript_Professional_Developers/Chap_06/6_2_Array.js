@@ -214,3 +214,94 @@ colors = ["red", "green", "blue"];
 let colors_2 = colors.concat("yello", ["black", "brown"]);
 // the concat method is always spread the element
 console.log(colors_2); // ["red", "green", "blue", "yello", "black", "brown"]
+// if you want to don't spread the element ,you can always set Symbol.isConcatSpreadable = false
+let newClors = {
+  [Symbol.isConcatSpreadable]: false,
+  length: 2,
+  0: "pink",
+  1: "purple",
+};
+console.log(colors.concat("yellow", newClors));
+
+// slice method first parameter is begin, and second parameter is the end
+// but the slice is not change the original array
+let colors_3 = colors.slice(1);
+let colors_4 = colors.slice(1, 2);
+console.log(colors_3);
+console.log(colors_4);
+console.log("-----------------");
+// splice method has three different method;
+// it can influence the original array
+/**
+ * 1. delete element
+ * one parameter is begin index,the next parameter is length of delete element
+ */
+colors = ["red", "green", "blue"];
+let removed = colors.splice(0, 1);
+console.log(removed);
+console.log(colors);
+
+/**
+ * 2. insert element
+ * it should add a parameter to insert element
+ */
+// insert two element after index 1 element
+colors.splice(1, 0, "yellow", "orange");
+console.log(colors);
+
+/**
+ * 3. replace element
+ * it should two parameter is not equals zero;
+  it can say the insert element and replace element is are equal method;
+*/
+
+colors = ["red", "green", "blue"];
+colors.splice(1, 1, "yellow", "orange");
+console.log(colors);
+
+// search
+//strict equal
+let number = [1, 2, 3, 4, 5, 4, 3, 2, 1];
+console.log(number.indexOf(4)); // 3
+console.log(number.lastIndexOf(4)); // 5
+console.log(number.includes(4)); // true
+
+//assert method
+const person = [
+  { name: "Matt", age: 27 },
+  { name: "Nicholas", age: 29 },
+];
+
+// if find the element ,find and findindex will not find next
+result = person.find((element, index, array) => element.age < 28);
+console.log(result);
+result = person.findIndex((element, index, array) => element.age < 28);
+console.log(result);
+
+// lambda function
+number = [1, 2, 3, 4, 5];
+// every method is all element is euqal the function
+let everyReuslt = number.every((item, index, array) => item > 2);
+console.log(everyReuslt); //false
+
+// some method is has element concat the value;
+everyReuslt = number.some((item, index, array) => item > 2);
+
+// filter is output the array of equal the value
+everyReuslt = number.filter((item, index, array) => item > 2);
+console.log(everyReuslt); //[ 3, 4, 5 ]
+
+// map is every element should do the opeartor ;
+everyReuslt = number.map((item, index, array) => item * 2);
+console.log(everyReuslt);
+
+// reduce method
+// reduce first element begin and last elemnt is end
+// four parameter is one is last reduce value,secode is now element,third is index of now element,and the end element is array
+let value = [1, 2, 3, 4, 5];
+let sum = value.reduce((prev, cur, index, value) => prev + cur);
+console.log(sum); // 15
+
+// reduceRight is from right to left
+sum = value.reduceRight((prev, cur, index, value) => prev + cur);
+console.log(sum); // 15
