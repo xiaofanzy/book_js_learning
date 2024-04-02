@@ -227,4 +227,16 @@ console.log(iter3.next());
 
 // 我们可以对迭代器进行return属性得复制,这样调用得时候提前退出会调用return 方法了
 let iter4 = a1[Symbol.iterator]();
-iter4.return = function () {};
+iter4.return = function () {
+  console.log("return called");
+  return {
+    done: true,
+  };
+};
+
+for (let i of iter4) {
+  if (i > 1) {
+    break;
+  }
+  console.log(i);
+}
