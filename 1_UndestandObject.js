@@ -70,3 +70,56 @@ Object.defineProperty(book, "year", {
 
 book.year = 2018;
 console.log(book.year);
+
+let books = {};
+Object.defineProperties(books, {
+  year_: {
+    value: 2017,
+  },
+  edition: {
+    value: 1,
+  },
+  year: {
+    get() {
+      return this.year_;
+    },
+    set(value) {
+      if (value > 2017) {
+        this.year_ = value;
+        this.edition += value - 2017;
+      }
+    },
+  },
+});
+
+let descriptor = Object.getOwnPropertyDescriptor(book, "year");
+console.log(descriptor.value);
+console.log(descriptor.configurable);
+console.log(typeof descriptor.get); // function
+let descriptors = Object.getOwnPropertyDescriptors(book, "year");
+console.log(descriptors.value);
+
+// Object.getOwnPropertyDescriptors 静态方法，当调用的时候，会在一个新对象上面返回他们
+Object.defineProperties(book, {
+  year_: {
+    value: 2017,
+  },
+
+  edition: {
+    value: 1,
+  },
+  year: {
+    get() {
+      return this.year_;
+    },
+    set(value) {
+      if (value > 2017) {
+        this.year_ = value;
+        this.edition += value - 2017;
+      }
+    },
+  },
+});
+console.log(Object.getOwnPropertyDescriptors(book));
+
+// 合并对象
